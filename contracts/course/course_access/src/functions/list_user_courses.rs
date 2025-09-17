@@ -4,7 +4,7 @@ use crate::schema::UserCourses;
 
 const USER_KEY: Symbol = symbol_short!("user");
 
-pub fn course_access_list_user_courses(env: Env, user: Address) -> UserCourses {
+pub fn CourseAccessListUserCourses(env: Env, user: Address) -> UserCourses {
     let username: String = user.to_string();
     let key: (Symbol, String) = (USER_KEY, username.clone());
 
@@ -26,7 +26,7 @@ mod test {
     const USER_KEY: Symbol = symbol_short!("user");
 
     #[test]
-    fn test() {
+    fn Test() {
         let env: Env = Env::default();
 
         let contract_id: Address = env.register(CourseAccessContract, {});

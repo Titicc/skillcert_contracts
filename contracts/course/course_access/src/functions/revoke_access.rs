@@ -1,6 +1,6 @@
 use soroban_sdk::{Address, Env, String};
 
-pub fn course_access_revoke_access(env: Env, course_id: String, user: Address) -> bool {
+pub fn CourseAccessRevokeAccess(env: Env, course_id: String, user: Address) -> bool {
     // Create storage key
     let key = ("course_access", (course_id, user));
 
