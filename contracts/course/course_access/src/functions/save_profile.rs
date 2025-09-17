@@ -1,7 +1,7 @@
 use crate::schema::{DataKey, UserProfile};
 use soroban_sdk::{Address, Env, String};
 
-pub fn save_profile(
+pub fn SaveProfile(
     env: Env,
     name: String,
     email: String,

@@ -4,7 +4,7 @@ use crate::schema::CourseUsers;
 
 const COURSES_KEY: Symbol = symbol_short!("courses");
 
-pub fn course_access_list_course_access(env: Env, course_id: String) -> CourseUsers {
+pub fn CourseAccessListCourseAccess(env: Env, course_id: String) -> CourseUsers {
     let key: (Symbol, String) = (COURSES_KEY, course_id.clone());
 
     let addresses: CourseUsers = env
