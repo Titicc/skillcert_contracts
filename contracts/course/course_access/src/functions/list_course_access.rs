@@ -1,28 +1,39 @@
-use soroban_sdk::{symbol_short, Env, String, Symbol};
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 SkillCert
 
-use crate::schema::CourseUsers;
+use soroban_sdk::{Env, String, Vec};
 
-const COURSES_KEY: Symbol = symbol_short!("courses");
+use crate::schema::{CourseUsers, DataKey};
 
-pub fn course_access_list_course_access(env: Env, course_id: String) -> CourseUsers {
-    let key: (Symbol, String) = (COURSES_KEY, course_id.clone());
-
-    let addresses: CourseUsers = env
-        .storage()
-        .persistent()
-        .get(&(key))
-        .expect("User Courses Not Found");
-
-    addresses
+/// List all users who have access to a specific course.
+///
+/// This function retrieves all users who have been granted access to the
+/// specified course. If no users have access, it returns an empty CourseUsers struct.
+///
+/// # Arguments
+///
+/// * `env` - The Soroban environment
+/// * `course_id` - The unique identifier of the course to query users for
+///
+/// # Returns
+///
+/// Returns a `CourseUsers` struct containing the course ID and a list
+/// of user addresses who have access to the course. If no users are found,
+/// returns an empty list.
+pub fn list_course_access(env: Env, course_id: String) -> CourseUsers {
+    let key = DataKey::CourseUsers(course_id.clone());
+    env.storage().persistent().get(&key).unwrap_or(CourseUsers {
+        course: course_id,
+        users: Vec::new(&env),
+    })
 }
 
 #[cfg(test)]
 mod test {
-    use soroban_sdk::{symbol_short, testutils::Address as _, vec, Address, Env, String, Symbol};
+    use crate::schema::{DataKey};
+    use soroban_sdk::{testutils::Address as _, vec, Address, Env, String};
 
     use crate::{course_access_list_course_access, CourseAccessContract, CourseUsers};
-
-    const COURSES_KEY: Symbol = symbol_short!("courses");
 
     #[test]
     fn test() {
@@ -31,6 +42,9 @@ mod test {
         let contract_id: Address = env.register(CourseAccessContract, {});
 
         let course_id: String = String::from_str(&env, "test_course_123");
+
+        let key: DataKey = DataKey::CourseUsers(course_id.clone());
+
         let user1: Address = Address::generate(&env);
         let user2: Address = Address::generate(&env);
 
@@ -45,8 +59,10 @@ mod test {
         env.clone().as_contract(&contract_id, || {
             env.storage()
                 .persistent()
-                .set(&(COURSES_KEY, course_id.clone()), &course_users);
+                .set(&(key), &course_users);
+
             let result: CourseUsers = course_access_list_course_access(env, course_id.clone());
+
             assert_eq!(result, course_users);
         });
     }

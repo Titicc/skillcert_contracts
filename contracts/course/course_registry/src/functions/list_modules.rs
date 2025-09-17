@@ -1,9 +1,13 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2025 SkillCert
+
+use crate::error::{handle_error, Error};
 use crate::schema::CourseModule;
 use soroban_sdk::{Env, String, Symbol};
 
 pub fn course_registry_list_modules(env: &Env, course_id: String) -> CourseModule {
     if course_id.len() == 0 {
-        panic!("Course ID cannot be empty");
+        handle_error(&env, Error::EmptyCourseId)
     }
 
     let key: Symbol = Symbol::new(env, "module");
