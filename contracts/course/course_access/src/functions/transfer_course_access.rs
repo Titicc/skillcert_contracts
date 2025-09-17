@@ -28,19 +28,19 @@ const COURSE_TRANSFER_EVENT: Symbol = symbol_short!("transfer");
 /// # Panics
 ///
 /// Panics with `Error::UserNoAccessCourse` if the source user doesn't have access to the course.
-pub fn transfer_course_access(env: Env, course_id: String, from: Address, to: Address) {
-    // Create the storage key for this course and current  user combination
-    let key: DataKey = DataKey::CourseAccess(course_id.clone(), from.clone());
+pub fn TransferCourseAccess(env: Env, course_id: String, from: Address, to: Address) {
+    // Create the storage key for this course and current user combination
+    let access_key: DataKey = DataKey::CourseAccess(course_id.clone(), from.clone());
 
     // Check if access exists to transfer
-    if !env.storage().persistent().has(&key) {
+    if !env.storage().persistent().has(&access_key) {
         handle_error(&env, Error::UserNoAccessCourse);
     }
 
     // TODO: Implement checks for recipient eligibility (user status, limits, etc.)
 
     // Create the course access entry for the new user
-    let course_access: CourseAccess = CourseAccess {
+    let new_course_access: CourseAccess = CourseAccess {
         course_id: course_id.clone(),
         user: to.clone(),
     };
@@ -48,11 +48,11 @@ pub fn transfer_course_access(env: Env, course_id: String, from: Address, to: Ad
     // Store the access entry with the composite key for the new user
     env.storage().persistent().set(
         &DataKey::CourseAccess(course_id.clone(), to.clone()),
-        &course_access,
+        &new_course_access,
     );
 
     // Remove the old user's access
-    env.storage().persistent().remove(&key);
+    env.storage().persistent().remove(&access_key);
 
     // Extend the TTL for the new user's storage entry
     env.storage().persistent().extend_ttl(

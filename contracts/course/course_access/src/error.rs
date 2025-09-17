@@ -39,6 +39,6 @@ pub enum Error {
 ///
 /// This function always panics with the provided error, which is the intended behavior
 /// for error handling in Soroban contracts.
-pub fn handle_error(env: &Env, error: Error) -> ! {
+pub fn HandleError(env: &Env, error: Error) -> ! {
     panic_with_error!(env, error);
 }

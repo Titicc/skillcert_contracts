@@ -27,7 +27,7 @@ use soroban_sdk::{Address, Env, String};
 /// - `Error::NameRequired` if name is empty
 /// - `Error::EmailRequired` if email is empty
 /// - `Error::CountryRequired` if country is empty
-pub fn save_profile(
+pub fn SaveProfile(
     env: Env,
     name: String,
     email: String,
@@ -48,7 +48,7 @@ pub fn save_profile(
         handle_error(&env, Error::CountryRequired)
     }
 
-    let profile = UserProfile {
+    let user_profile = UserProfile {
         name,
         email,
         profession,
@@ -58,5 +58,5 @@ pub fn save_profile(
 
     env.storage()
         .persistent()
-        .set(&DataKey::UserProfile(user), &profile);
+        .set(&DataKey::UserProfile(user), &user_profile);
 }

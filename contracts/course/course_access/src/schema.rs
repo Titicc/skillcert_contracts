@@ -79,7 +79,7 @@ pub struct CourseUsers {
 }
 
 /// Global configuration key for storing the user management contract address
-pub const KEY_USER_MGMT_ADDR: &str = "user_mgmt_addr";
+pub const KeyUserMgmtAddr: &str = "user_mgmt_addr";
 
 /// Global configuration key for storing the course registry contract address
-pub const KEY_COURSE_REG_ADDR: &str = "course_registry_addr";
+pub const KeyCourseRegAddr: &str = "course_registry_addr";

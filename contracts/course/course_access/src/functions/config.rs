@@ -25,7 +25,7 @@ const KEY_OWNER: &str = "owner";
 /// # Panics
 ///
 /// Panics if the contract has already been initialized.
-pub fn initialize(
+pub fn Initialize(
     env: Env,
     caller: Address,
     user_mgmt_addr: Address,
@@ -44,11 +44,11 @@ pub fn initialize(
         panic!("already initialized");
     }
 
-    let inst = env.storage().instance();
-    inst.set(&(KEY_OWNER,), &caller);
-    inst.set(&(KEY_USER_MGMT_ADDR,), &user_mgmt_addr);
-    inst.set(&(KEY_COURSE_REG_ADDR,), &course_registry_addr);
-    inst.set(&(KEY_INIT,), &true);
+    let inst_storage = env.storage().instance();
+    inst_storage.set(&(KEY_OWNER,), &caller);
+    inst_storage.set(&(KEY_USER_MGMT_ADDR,), &user_mgmt_addr);
+    inst_storage.set(&(KEY_COURSE_REG_ADDR,), &course_registry_addr);
+    inst_storage.set(&(KEY_INIT,), &true);
 }
 
 /// Update external contract addresses.
@@ -67,7 +67,7 @@ pub fn initialize(
 /// # Panics
 ///
 /// Panics if the contract is not initialized or if the caller is not the owner.
-pub fn set_contract_addrs(
+pub fn SetContractAddrs(
     env: Env,
     caller: Address,
     user_mgmt_addr: Address,
@@ -95,11 +95,11 @@ pub fn set_contract_addrs(
         panic!("only owner");
     }
 
-    let inst = env.storage().instance();
-    inst.set(&(KEY_USER_MGMT_ADDR,), &user_mgmt_addr);
-    inst.set(&(KEY_COURSE_REG_ADDR,), &course_registry_addr);
+    let inst_storage = env.storage().instance();
+    inst_storage.set(&(KEY_USER_MGMT_ADDR,), &user_mgmt_addr);
+    inst_storage.set(&(KEY_COURSE_REG_ADDR,), &course_registry_addr);
 }
 
 /// TTL configuration constants for persistent storage entries
-pub const TTL_TTL: u32 = 1000; // time-to-live
-pub const TTL_BUMP: u32 = 100; // bump amount on access
+pub const TtlTtl: u32 = 1000; // time-to-live
+pub const TtlBump: u32 = 100; // bump amount on access
